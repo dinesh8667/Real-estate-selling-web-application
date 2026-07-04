@@ -1,12 +1,12 @@
-# Obsidian Estate - Ultra-Luxury Real Estate Platform
+# MintFizo Estate - Ultra-Luxury Real Estate Platform
 
-Obsidian Estate is a full-stack SaaS property management platform designed for ultra-luxury real estate portfolios. The application features a secure role-based ecosystem (Buyers and Sellers), a centralized management dashboard with advanced multipart/form-data media handling, and a beautifully curated public storefront.
+MintFizo Estate is a full-stack SaaS property management platform designed for ultra-luxury real estate portfolios. The application features a secure role-based ecosystem (Buyers and Sellers), a centralized management dashboard with advanced multipart/form-data media handling, a dedicated messaging system, and a beautifully curated public storefront.
 
 ## 🚀 Tech Stack
 
 ### Frontend
 - **React.js** (Vite)
-- **Tailwind CSS** & Custom External CSS
+- **Bootstrap CSS** & Custom External CSS
 - **React Router Dom** (SPA Routing & Protected Routes)
 - **Axios** (API Client)
 - **React Icons**
@@ -26,30 +26,46 @@ Obsidian Estate is a full-stack SaaS property management platform designed for u
 - **Dynamic Portfolios:** Automated price shrink formatting (e.g., `$12.5M`) and fallback image management via data-driven state pipelines.
 - **Multipart Media Upload Pipeline:** Multi-file upload stream via native browser `FormData` mapped directly onto sequential nested relational database fields.
 - **Public Storefront:** Unauthenticated conditional reading (`IsAuthenticatedOrReadOnly`) filtering active assets for prospective buyers.
+- **Direct Buyer-Seller Messaging:** Integrated communication hub allowing prospective buyers to message sellers directly regarding specific properties, complete with chat history and contextual property linking.
+- **Seller Profile Management:** Dedicated settings interface for agents to manage their public identity, agency details, and professional bio seamlessly.
 
 ---
 
 ## 📸 Application Gallery
 
-Here is a look at the Obsidian Estate platform in action:
+Here is a look at the MintFizo Estate platform in action:
 
 ### 1. Public Storefront (Home)
-![Home Page UI](./assets/Home.png)
+![Home Page UI](home-page.png)
 *The unauthenticated public landing page featuring an interactive search engine and dynamic luxury real estate grid.*
 
-### 2. Seller Dashboard
-![Dashboard UI](./assets/Manage-Listings.png)
-*The centralized, role-protected management hub where verified sellers track, edit, and upload their portfolios.*
+### 2. Account Registration (Signup)
+![Signup UI](signup-page.png)
+*Secure role-based onboarding where users choose to join the platform as a prospective buyer or an exclusive seller.*
 
-### 4. Immersive Property Showcase (The "Zillow" View)
-![Property Detail UI](./assets/Estate-Detail.png)
+### 3. Seller Dashboard
+![Dashboard UI](dashboard-page.png)
+*The centralized, role-protected management hub where verified sellers track, edit, and oversee their entire property portfolio.*
+
+### 4. Property Creation (New Listing)
+![New Listing UI](new-listing-page.png)
+*A comprehensive multipart form allowing sellers to upload rich property details, set pricing, and manage high-resolution image galleries.*
+
+### 5. Immersive Property Showcase (The "Zillow" View)
+![Property Detail UI](property-page.png)
 *The high-converting buyer deep-dive page, featuring an expanded image gallery, full estate specifications, and a direct negotiation trigger.*
 
-### 5. Buyer's Private Shortlist (Saved Properties)
-![Saved Properties UI](./assets/Saved-Properties.png)
-*A personalized buyer hub where favorited luxury estates are stored for quick comparison and status tracking.*
+### 6. Seller Profile Management
+![Profile Settings UI](profile-page.png)
+*A dedicated settings page where agents can update their professional identity, contact details, and agency bio.*
 
-> **Note:** To replace these placeholders with your actual screenshots, take a screenshot of your app, save them in a folder called `assets` in your GitHub repo, and change the URL in the markdown to `assets/home-page.png`, etc.
+### 7. Inquiries Inbox
+![Inquiries UI](notification-page.png)
+*A centralized inbox for sellers to track and manage incoming buyer interests and viewing requests across all their active listings.*
+
+### 8. Direct Communication Hub
+![Communication UI](chat-page.png)
+*A seamless messaging interface connecting buyers and sellers directly, featuring contextual property details and threaded chat history.*
 
 ---
 
@@ -67,7 +83,7 @@ Property-managment-project/
 └── obsidian_frontend/         # React Frontend
     ├── src/
     │   ├── components/        # Reusable Elements (ProtectedRoute, Navbar)
-    │   ├── pages/             # App Views (Home, Login, Register, Dashboard, AddProperty)
+    │   ├── pages/             # App Views (Home, Login, Register, Dashboard, AddProperty, Communication, etc.)
     │   ├── App.jsx            # Routing & Application Layout
     │   └── style.css          # Centralized Global Custom Styles
     └── package.json

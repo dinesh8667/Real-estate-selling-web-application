@@ -1,12 +1,12 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import './style.css'
+import './style.css';
 import axios from 'axios';
 
-function index() {
-    const [userType, setUserType] = useState("buyer");
-    const [credentials, setCredentials] = useState({ email: '', password: '' });
-    const [errorMessage, setErrorMessage] = useState('');
+function Index() {
+  const [userType, setUserType] = useState("buyer");
+  const [credentials, setCredentials] = useState({ email: '', password: '' });
+  const [errorMessage, setErrorMessage] = useState('');
 
   const navigate = useNavigate();
 
@@ -17,28 +17,41 @@ function index() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Attempting login for:", credentials.email);
-
+    setErrorMessage(''); // Clear previous errors on new submission
+    
     try {
-      // Send the login request to the Django JWT endpoint
-      // Note: Django's default JWT expects 'username' and 'password'
       const response = await axios.post('http://127.0.0.1:8000/api/token/', {
-        username: credentials.email, // We used email as the username during registration!
+        username: credentials.email,
         password: credentials.password
       });
 
-      console.log("Django sent back:", response.data);
+      // 1. Grab the actual account type from the Django response
+      const isActuallySeller = response.data.is_seller;
+      
+      // 2. Determine what they clicked on the frontend
+      const tryingToLoginAsSeller = userType === "seller";
 
-      console.log("Login successful!");
+      // 3. THE STRICT ROLE CHECK
+      if (isActuallySeller !== tryingToLoginAsSeller) {
+        setErrorMessage(`Access denied. This email is not registered as a ${userType}.`);
+        return; // Abort the function immediately so tokens aren't saved
+      }
 
-      // Lock the VIP tokens inside the browser's localStorage
+      // 4. If the check passes, save the tokens safely
+      console.log(response.data);
+      
       localStorage.setItem('accessToken', response.data.access);
       localStorage.setItem('refreshToken', response.data.refresh);
-      localStorage.setItem('userRole', userType); // Save if they logged in as buyer or seller
-      localStorage.setItem('isSeller', response.data.is_seller);
+      localStorage.setItem('user_id',response.data.user_id)
+      localStorage.setItem('userRole', userType);
+      localStorage.setItem('isSeller', isActuallySeller);
 
-      // Redirect them to the Dashboard!
-      navigate('/dashboard');
+      // (Optional) Store the custom name we added earlier if it exists
+      if (response.data.user_name) {
+        localStorage.setItem('userName', response.data.user_name);
+      }
+
+      navigate('/');
 
     } catch (error) {
       console.error("Login failed:", error.response?.data || error.message);
@@ -46,7 +59,7 @@ function index() {
     }
   };
 
-    return (
+  return (
     <div className="login-page">
       <div className="background-glow"></div>
 
@@ -56,24 +69,45 @@ function index() {
 
         <div className="toggle-container">
           <button
+            type="button" // Prevents the button from submitting the form
             className={`toggle-btn ${userType === "buyer" ? "active" : ""}`}
-            onClick={() => setUserType("buyer")}
+            onClick={() => {
+              setUserType("buyer");
+              setErrorMessage(''); // Clear errors on toggle
+            }}
           >
             Buyer
           </button>
 
           <button
+            type="button" // Prevents the button from submitting the form
             className={`toggle-btn ${userType === "seller" ? "active" : ""}`}
-            onClick={() => setUserType("seller")}
+            onClick={() => {
+              setUserType("seller");
+              setErrorMessage(''); // Clear errors on toggle
+            }}
           >
             Seller
           </button>
         </div>
 
+        {/* Display the error message if one exists */}
+        {errorMessage && (
+          <div style={{ color: '#ff6b6b', background: 'rgba(255, 0, 0, 0.08)', border: '1px solid rgba(255, 0, 0, 0.2)', padding: '10px', borderRadius: '8px', marginBottom: '15px', fontSize: '14px', textAlign: 'center' }}>
+            {errorMessage}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit}>
           <div className="input-group">
             <label>Email Address</label>
-            <input onChange={handleChange} name='email' type="email" placeholder="Enter your email" />
+            <input 
+              onChange={handleChange} 
+              name='email' 
+              type="email" 
+              placeholder="Enter your email" 
+              required
+            />
           </div>
 
           <div className="input-group">
@@ -82,25 +116,19 @@ function index() {
               <span className="forgot">Forgot?</span>
             </div>
 
-            <input onChange={handleChange} name='password' type="password" placeholder="Enter your password" />
+            <input 
+              onChange={handleChange} 
+              name='password' 
+              type="password" 
+              placeholder="Enter your password" 
+              required
+            />
           </div>
 
           <button type="submit" className="signin-btn">
             Sign In as {userType}
           </button>
         </form>
-
-        <div className="divider">
-          <span>OR</span>
-        </div>
-
-        <button className="google-btn">
-          <img
-            src="https://cdn-icons-png.flaticon.com/512/300/300221.png"
-            alt="Google"
-          />
-          Sign in with Google
-        </button>
 
         <p className="signup-text">
           Don't have an account? <Link to={'/signup'}><span>Sign up</span></Link>
@@ -110,4 +138,4 @@ function index() {
   );
 }
 
-export default index
+export default Index;

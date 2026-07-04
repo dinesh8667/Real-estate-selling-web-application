@@ -1,0 +1,240 @@
+// Color Variables
+$bg-main: #050505;
+$bg-card: #0a0a0a;
+$border-color: #1a1a1a;
+$border-hover: #4a1d75;
+$accent-purple: #892cdc;
+$text-light: #ffffff;
+$text-muted: #888888;
+$tag-bg-dark: rgba(0, 0, 0, 0.7);
+$tag-bg-purple: rgba(137, 44, 220, 0.15);
+
+.saved-page {
+  background-color: $bg-main;
+  color: $text-light;
+  min-height: 100vh;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  padding: clamp(40px, 6vw, 80px) clamp(20px, 4vw, 40px);
+  box-sizing: border-box;
+
+  a {
+    text-decoration: none;
+    color: inherit;
+    display: contents; // Ensures the link wrapper doesn't break the flex grid
+  }
+
+  .saved-container {
+    max-width: 1200px;
+    margin: 0 auto;
+
+    /* =========================================
+       HEADER SECTION
+       ========================================= */
+    .saved-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: clamp(30px, 4vw, 50px);
+
+      div {
+        h1 {
+          font-size: clamp(1rem, 4vw, 2.2rem);
+          margin: 0 0 10px 0;
+          font-weight: 600;
+          letter-spacing: -1px;
+        }
+
+        .title-line {
+          width: clamp(60px, 8vw, 80px);
+          height: 4px;
+          background-color: $accent-purple;
+          border-radius: 2px;
+        }
+      }
+
+      > span {
+        color: $text-muted;
+        font-size: clamp(0.9rem, 1.5vw, 1rem);
+        margin-bottom: 6px;
+      }
+    }
+
+    .no-saved {
+      text-align: center;
+      padding: clamp(60px, 10vw, 100px) 20px;
+      color: $text-muted;
+
+      h1 {
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        font-weight: 500;
+      }
+    }
+
+    /* =========================================
+       SAVED CARDS GRID
+       ========================================= */
+    .saved-grid {
+      // Fluid gap definition
+      --card-gap: clamp(16px, 2.5vw, 24px);
+      
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--card-gap);
+
+      .saved-card {
+        background-color: $bg-card;
+        border: 1px solid $border-color;
+        border-radius: 12px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        transition: all 0.3s ease;
+        
+        // Exactly 3 cards per row mathematically
+        width: calc((100% - (2 * var(--card-gap))) / 3);
+        // Fixed fluid height
+        height: clamp(360px, 32vw, 400px);
+
+        &:hover {
+          border-color: $border-hover;
+          transform: translateY(-4px);
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .saved-image {
+          position: relative;
+          width: 100%;
+          height: 55%;
+          overflow: hidden;
+
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+          }
+
+          .card-tags {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            display: flex;
+            gap: 8px;
+
+            span {
+              padding: 4px 12px;
+              border-radius: 20px;
+              font-size: clamp(0.7rem, 1vw, 0.75rem);
+              font-weight: 500;
+              backdrop-filter: blur(4px);
+
+              &.status-tag {
+                background-color: $tag-bg-dark;
+                color: $text-light;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+              }
+
+              &.new-tag {
+                background-color: $tag-bg-purple;
+                color: lighten($accent-purple, 15%);
+                border: 1px solid rgba(137, 44, 220, 0.3);
+              }
+            }
+          }
+        }
+
+        &:hover .saved-image img {
+          transform: scale(1.05);
+        }
+
+        .saved-content {
+          padding: clamp(16px, 2vw, 24px);
+          height: 45%;
+          display: flex;
+          flex-direction: column;
+
+          // Price is visually the largest in your UI reference, 
+          // but mapped to h3 in your JSX.
+          h3 { 
+            font-size: clamp(1.4rem, 2vw, 1.8rem);
+            margin: 0 0 8px 0;
+            color: $text-light;
+            font-weight: 600;
+          }
+
+          // Title and Address mapped to h2 and p
+          h2, p {
+            margin: 0 0 4px 0;
+            font-size: clamp(0.85rem, 1.2vw, 0.95rem);
+            color: $text-muted;
+            
+            // Single line truncation logic
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+
+          h2 {
+            font-weight: 500;
+          }
+
+          .property-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto; // Pushes meta to the bottom
+            padding-top: clamp(12px, 1.5vw, 16px);
+            border-top: 1px solid $border-color;
+
+            div {
+              display: flex;
+              align-items: center;
+              gap: 6px;
+              color: $text-muted;
+              font-size: clamp(0.75rem, 1vw, 0.85rem);
+
+              svg {
+                color: #555;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/* =========================================
+   MEDIA QUERIES (RESPONSIVE GRID)
+   ========================================= */
+@media screen and (max-width: 1024px) {
+  .saved-page {
+    .saved-container {
+      .saved-grid {
+        .saved-card {
+          // Exactly 2 cards per row on tablets
+          width: calc((100% - var(--card-gap)) / 2);
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .saved-page {
+    .saved-container {
+      .saved-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .saved-grid {
+        .saved-card {
+          // Exactly 1 card per row on mobile phones
+          width: 100%;
+        }
+      }
+    }
+  }
+}

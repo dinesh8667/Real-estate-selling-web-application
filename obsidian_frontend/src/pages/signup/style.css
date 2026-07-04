@@ -131,44 +131,6 @@
   margin-top: 10px;
 }
 
-.divider {
-  display: flex;
-  align-items: center;
-  margin: 25px 0;
-}
-
-.divider::before,
-.divider::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.15);
-}
-
-.divider span {
-  margin: 0 15px;
-  color: #bfbfbf;
-}
-
-.google-btn {
-  width: 100%;
-  padding: 14px;
-  border-radius: 50px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.05);
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-}
-
-.google-btn img {
-  width: 22px;
-  height: 22px;
-}
-
 .signup-text {
   margin-top: 25px;
 }

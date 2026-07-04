@@ -2,22 +2,19 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import "./style.css";
+import "./style.scss";
 
 function Dashboard() {
-    // 1. Set up state for our dynamic data
     const [properties, setProperties] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
 
-    // 2. Fetch data when the component loads
     useEffect(() => {
         const fetchMyProperties = async () => {
             try {
                 const token = localStorage.getItem('accessToken');
 
-                // Call your Django API, passing the VIP token in the headers
-                const response = await axios.get('http://127.0.0.1:8000/api/properties/', {
+                const response = await axios.get('http://127.0.0.1:8000/api/properties/?my_listings=true', {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -28,7 +25,6 @@ function Dashboard() {
 
             } catch (error) {
                 console.error("Error fetching properties:", error);
-                // If the token is invalid or expired, boot them back to login
                 if (error.response?.status === 401) {
                     localStorage.clear();
                     navigate('/login');
@@ -36,8 +32,6 @@ function Dashboard() {
                 setIsLoading(false);
             }
         };
-
-        console.log(properties)
 
         fetchMyProperties();
     }, [navigate]);
@@ -53,21 +47,8 @@ function Dashboard() {
                     from your centralized seller dashboard.
                 </p>
             </div>
-
+            <Link to={'/addlisting'}><button className="new-btn">+ New Listing</button></Link>
             <div className="table-wrapper">
-                <div className="table-header">
-                    <input
-                        type="text"
-                        placeholder="🔍 Search properties..."
-                        className="search-box"
-                    />
-
-                    <div className="header-actions">
-                        <button className="filter-btn">Filter</button>
-                        <Link to={'/addlisting'}><button className="new-btn">+ New Listing</button></Link>
-                    </div>
-                </div>
-
                 <div className="table-responsive">
                     {isLoading ? (
                         <div style={{ textAlign: "center", padding: "40px", color: "#892cdc" }}>
@@ -88,55 +69,53 @@ function Dashboard() {
 
                             <tbody>
                                 {properties.map((property, index) => (
-                                    <tr key={property.id}>
-                                        <td>
-                                            {/* If your Django API doesn't send a main image yet, we use a fallback */}
-                                            <img
-                                                // We just grab Django's direct URL, and keep the fallback just in case!
-                                                src={property.main_image || "https://images.unsplash.com/photo-1564013799919-ab600027ffc6"}
-                                                alt={property.title}
-                                                className="property-image"
-                                                style={{ objectFit: 'cover', width: '100px', height: '70px', borderRadius: '8px' }}
-                                            />
-                                        </td>
+                                    <Link to={`/property/${property.id}`}>
+                                        <tr key={property.id}>
+                                            <td>
+                                                <img
+                                                    src={property.main_image || "https://images.unsplash.com/photo-1564013799919-ab600027ffc6"}
+                                                    alt={property.title}
+                                                    className="property-image"
+                                                    style={{ objectFit: 'cover', width: '100px', height: '70px', borderRadius: '8px' }}
+                                                />
+                                            </td>
 
-                                        <td>
-                                            <h4
-                                                className={
-                                                    property.status === "Sold" ? "strike-text" : ""
-                                                }
-                                            >
-                                                {property.title}
-                                            </h4>
-                                            {/* Using the city from your Django model as the address */}
-                                            <p>{property.city}</p>
-                                        </td>
+                                            <td>
+                                                <h4
+                                                    className={
+                                                        property.status === "Sold" ? "strike-text" : ""
+                                                    }
+                                                >
+                                                    {property.title}
+                                                </h4>
+                                                <p>{property.city}</p>
+                                            </td>
 
-                                        <td>
-                                            {/* Format the raw Django decimal into a clean dollar amount */}
-                                            ${parseFloat(property.price).toLocaleString()}
-                                        </td>
+                                            <td>
+                                                ${parseFloat(property.price).toLocaleString()}
+                                            </td>
 
-                                        <td>
-                                            <span
-                                                className={`status ${property.status ? property.status.toLowerCase() : "draft"}`}
-                                            >
-                                                {property.status || "Draft"}
-                                            </span>
-                                        </td>
+                                            <td>
+                                                <span
+                                                    className={`status ${property.status ? property.status.toLowerCase() : "draft"}`}
+                                                >
+                                                    {property.status || "Draft"}
+                                                </span>
+                                            </td>
+                                            <td>{property.views || 0}</td>
 
-                                        {/* Defaulting to 0 views if the backend doesn't provide it yet */}
-                                        <td>{property.views || 0}</td>
+                                            <td>
+                                                <Link to={`/edit/${property.id}`}>
+                                                    <button className="action-btn">
+                                                        Edit
+                                                    </button>
+                                                </Link>
 
-                                        <td>
-                                            <button className="action-btn">
-                                                Edit
-                                            </button>
-                                        </td>
-                                    </tr>
+                                            </td>
+                                        </tr>
+                                    </Link>
+
                                 ))}
-
-                                {/* Fallback if the seller has no properties yet */}
                                 {properties.length === 0 && (
                                     <tr>
                                         <td colSpan="6" style={{ textAlign: "center", padding: "20px", color: "gray" }}>

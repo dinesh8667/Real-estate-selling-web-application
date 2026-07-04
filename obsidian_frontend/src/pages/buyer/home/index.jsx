@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./style.css";
+import { Link } from 'react-router-dom'
 import {
     FaMapMarkerAlt,
     FaSearch,
@@ -14,6 +14,7 @@ import {
     FaBath,
     FaRulerCombined,
 } from "react-icons/fa";
+import "./style.scss";
 
 const categories = [
     {
@@ -48,16 +49,22 @@ const categories = [
     },
 ];
 
-function Index() {
-    const [properties, setProperties] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-
+function Index({ setSearch, search }) {
+    const [properties, setProperties] = useState([])
+    const [isLoading, setIsLoading] = useState(true)
+    const [price, setPrice] = useState([])
     useEffect(() => {
         const fetchPublicProperties = async () => {
             try {
                 const response = await axios.get("http://127.0.0.1:8000/api/properties/");
                 const activeProperties = response.data.filter(prop => prop.status === 'Active');
                 setProperties(activeProperties);
+                const unavailablePrices = activeProperties
+                    .filter(item => !price.includes(item.price))
+                    .map(item => item.price);
+
+                setPrice(unavailablePrices);
+
                 setIsLoading(false);
             } catch (error) {
                 console.error("Error fetching properties:", error);
@@ -71,7 +78,7 @@ function Index() {
     const formatPrice = (priceStr) => {
         const price = parseFloat(priceStr);
         if (price >= 1000000) {
-            return `$${(price / 1000000).toFixed(1)}M`;
+            return `₹${(price / 1000000).toFixed(1)}M`;
         }
         return `$${price.toLocaleString()}`;
     };
@@ -94,26 +101,33 @@ function Index() {
                             <FaMapMarkerAlt />
                             <input
                                 type="text"
+                                name="location"
                                 placeholder="Location, Neighborhood, or City"
+                                onChange={(e) => setSearch({ ...search, [e.target.name]: e.target.value })}
                             />
                         </div>
 
                         <div className="divider"></div>
 
                         <div className="search-item">
-                            <span>$</span>
-                            <select>
-                                <option>Select Budget</option>
-                                <option>$500K - $1M</option>
-                                <option>$1M - $5M</option>
-                                <option>$5M+</option>
+                            <span>₹</span>
+                            <select name="price" onChange={(e) => setSearch({ ...search, [e.target.name]: e.target.value })}>
+                                <option value="">Select Budget</option>
+                                {
+                                    price.map((item, index) => {
+                                        return (
+                                            <option value={item}>&lt; {item}</option>
+                                        )
+                                    })
+                                }
                             </select>
                         </div>
-
-                        <button>
-                            <FaSearch />
-                            Search
-                        </button>
+                        <Link to={'/browse'}>
+                            <button>
+                                <FaSearch />
+                                Search
+                            </button>
+                        </Link>
                     </div>
                 </div>
             </section>
@@ -156,48 +170,50 @@ function Index() {
                             </div>
                         ) : (
                             properties.map((property) => (
-                                <div className="property-card" key={property.id}>
-                                    <div>
-                                        <img 
-                                            className="property-img" 
-                                            src={property.main_image || "https://images.unsplash.com/photo-1564013799919-ab600027ffc6"} 
-                                            alt={property.title} 
-                                        />
+                                <Link to={`/property/${property.id}`} key={property.id}>
+                                    <div className="property-card">
+                                        <div>
+                                            <img
+                                                className="property-img"
+                                                src={property.main_image || "https://images.unsplash.com/photo-1564013799919-ab600027ffc6"}
+                                                alt={property.title}
+                                            />
+                                        </div>
+
+                                        <div className="property-content">
+                                            <div className="property-header">
+                                                <h3 className="property-title">
+                                                    {property.title}
+                                                </h3>
+                                                <span className="price">{formatPrice(property.price)}</span>
+                                            </div>
+
+                                            <div className="location">
+                                                <FaMapMarkerAlt />
+                                                <span>{property.city}</span>
+                                            </div>
+
+                                            <div className="divider-line"></div>
+
+                                            <div className="property-info">
+                                                <div className="info-item">
+                                                    <FaBed />
+                                                    <span>{property.bedrooms}</span>
+                                                </div>
+
+                                                <div className="info-item">
+                                                    <FaBath />
+                                                    <span>{property.bathrooms}</span>
+                                                </div>
+
+                                                <div className="info-item">
+                                                    <FaRulerCombined />
+                                                    <span>{property.area_sqft} sqft</span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-
-                                    <div className="property-content">
-                                        <div className="property-header">
-                                            <h3 className="property-title">
-                                                {property.title}
-                                            </h3>
-                                            <span className="price">{formatPrice(property.price)}</span>
-                                        </div>
-
-                                        <div className="location">
-                                            <FaMapMarkerAlt />
-                                            <span>{property.city}</span>
-                                        </div>
-
-                                        <div className="divider-line"></div>
-
-                                        <div className="property-info">
-                                            <div className="info-item">
-                                                <FaBed />
-                                                <span>{property.bedrooms}</span>
-                                            </div>
-
-                                            <div className="info-item">
-                                                <FaBath />
-                                                <span>{property.bathrooms}</span>
-                                            </div>
-
-                                            <div className="info-item">
-                                                <FaRulerCombined />
-                                                <span>{property.area_sqft} sqft</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                </Link>
                             ))
                         )}
                     </div>

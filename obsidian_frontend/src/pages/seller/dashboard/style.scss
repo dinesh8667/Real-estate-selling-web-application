@@ -1,0 +1,286 @@
+// Variables
+$bg-main: #0a0a0a;
+$bg-card: #181818;
+$border-color: #2a2a2a;
+$primary-purple: #6c169b;
+$secondary-purple: #892cdc;
+$text-light: #ffffff;
+$text-muted: #a0a0a0;
+
+.management-container {
+  background-color: $bg-main;
+  color: $text-light;
+  // Fluid padding: 16px on mobile, scales with viewport, max 40px on desktop
+  padding: clamp(16px, 4vw, 40px); 
+  min-height: 100vh;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  box-sizing: border-box;
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  > a {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: clamp(15px, 2vw, 20px);
+  }
+
+  .heading-section {
+    margin-bottom: clamp(15px, 3vw, 20px);
+
+    h1 {
+      // Fluid typography: 1.8rem on mobile, up to 2.5rem on desktop
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      margin: 0 0 10px 0;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .line {
+      width: clamp(40px, 6vw, 60px);
+      height: 4px;
+      background-color: $secondary-purple;
+      margin-bottom: clamp(12px, 2vw, 20px);
+      border-radius: 2px;
+    }
+
+    p {
+      color: $text-muted;
+      font-size: clamp(0.9rem, 2vw, 1.1rem);
+      max-width: 600px;
+      line-height: 1.6;
+      margin: 0;
+    }
+  }
+
+  .new-btn {
+    background-color: $secondary-purple;
+    color: $text-light;
+    border: none;
+    // Fluid button padding
+    padding: clamp(8px, 1.5vw, 10px) clamp(16px, 3vw, 24px);
+    border-radius: 20px;
+    font-weight: 500;
+    font-size: clamp(0.85rem, 1.5vw, 0.95rem);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: darken($secondary-purple, 10%);
+    }
+  }
+
+  .table-wrapper {
+    background-color: $bg-card;
+    border: 1px solid $border-color;
+    border-radius: 12px;
+    overflow: hidden; 
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+
+    .table-responsive {
+      overflow-x: auto;
+      width: 100%;
+      -webkit-overflow-scrolling: touch; // Smooth scrolling on iOS
+
+      &::-webkit-scrollbar {
+        height: 6px;
+      }
+      &::-webkit-scrollbar-thumb {
+        background-color: #333;
+        border-radius: 4px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+        min-width: 700px; // Forces a scroll on very small devices to protect layout
+
+        thead {
+          background-color: $primary-purple;
+          
+          th {
+            padding: clamp(12px, 2vw, 18px) clamp(16px, 3vw, 24px);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            font-weight: 600;
+            color: $text-light;
+          }
+        }
+
+        tbody {
+          a {
+            display: contents;
+            &:hover tr {
+              background-color: rgba(255, 255, 255, 0.02);
+            }
+          }
+
+          tr {
+            border-bottom: 1px solid $border-color;
+            transition: background-color 0.2s ease;
+
+            &:last-child {
+              border-bottom: none;
+            }
+
+            td {
+              padding: clamp(12px, 2vw, 16px) clamp(16px, 3vw, 24px);
+              vertical-align: middle;
+
+              // Image scales slightly based on viewport
+              img.property-image {
+                width: clamp(70px, 10vw, 100px) !important;
+                height: clamp(50px, 7vw, 70px) !important;
+              }
+
+              h4 {
+                margin: 0 0 4px 0;
+                font-size: clamp(0.9rem, 1.5vw, 1rem);
+                font-weight: 500;
+                color: $text-light;
+
+                &.strike-text {
+                  text-decoration: line-through;
+                  color: $text-muted;
+                }
+              }
+
+              p, td {
+                font-size: clamp(0.8rem, 1.2vw, 0.9rem);
+              }
+
+              p {
+                margin: 0;
+                color: $text-muted;
+              }
+
+              .status {
+                display: inline-flex;
+                align-items: center;
+                padding: 4px 12px;
+                border-radius: 20px;
+                font-size: 0.75rem;
+                font-weight: 500;
+                border: 1px solid transparent;
+
+                &::before {
+                  content: '';
+                  display: inline-block;
+                  width: 6px;
+                  height: 6px;
+                  border-radius: 50%;
+                  margin-right: 6px;
+                }
+
+                &.active {
+                  background-color: rgba(46, 125, 50, 0.15);
+                  color: #4caf50;
+                  border-color: rgba(46, 125, 50, 0.3);
+                  &::before { background-color: #4caf50; }
+                }
+
+                &.draft {
+                  background-color: rgba(158, 158, 158, 0.15);
+                  color: #9e9e9e;
+                  border-color: rgba(158, 158, 158, 0.3);
+                  &::before { background-color: #9e9e9e; }
+                }
+
+                &.sold {
+                  background-color: rgba(198, 40, 40, 0.15);
+                  color: #ef5350;
+                  border-color: rgba(198, 40, 40, 0.3);
+                  &::before { background-color: #ef5350; }
+                }
+              }
+
+              .action-btn {
+                background: transparent;
+                color: $text-light;
+                border: 1px solid $border-color;
+                padding: 6px 16px;
+                border-radius: 20px;
+                font-size: clamp(0.75rem, 1vw, 0.85rem);
+                cursor: pointer;
+                transition: all 0.3s ease;
+
+                &:hover {
+                  background-color: rgba(255, 255, 255, 0.1);
+                  border-color: $text-light;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: clamp(12px, 2vw, 16px) clamp(16px, 3vw, 24px);
+      border-top: 1px solid $border-color;
+      background-color: $bg-card;
+      flex-wrap: wrap; // Allows items to stack on very small screens
+      gap: 15px;
+
+      span {
+        color: $text-muted;
+        font-size: clamp(0.75rem, 1.5vw, 0.85rem);
+      }
+
+      div {
+        display: flex;
+        gap: 8px;
+
+        button {
+          background-color: transparent;
+          color: $text-muted;
+          border: 1px solid $border-color;
+          padding: 6px 12px;
+          border-radius: 6px;
+          font-size: clamp(0.75rem, 1.5vw, 0.85rem);
+          cursor: pointer;
+          transition: all 0.2s ease;
+
+          &:hover:not(.active-page) {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: $text-light;
+          }
+
+          &.active-page {
+            border-color: $secondary-purple;
+            color: $secondary-purple;
+            font-weight: 600;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Media Queries for Layout Shifts (when clamp isn't enough)
+@media screen and (max-width: 600px) {
+  .management-container {
+    > a {
+      // Full width button on mobile
+      width: 100%;
+      button {
+        width: 100%;
+      }
+    }
+    
+    .table-wrapper {
+      .pagination {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+    }
+  }
+}

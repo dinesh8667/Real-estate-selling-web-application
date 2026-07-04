@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Property, FeatureTag, PropertyImage, UserProfile
+# REMOVED FeatureTag, ADDED PropertyType
+from .models import Property, PropertyImage, UserProfile, PropertyType
 
 # This allows you to upload images directly from the main Property page in the admin
 class PropertyImageInline(admin.TabularInline):
@@ -8,10 +9,14 @@ class PropertyImageInline(admin.TabularInline):
 
 class PropertyAdmin(admin.ModelAdmin):
     inlines = [PropertyImageInline]
-    list_display = ('title', 'price', 'city', 'status', 'seller')
-    list_filter = ('status', 'city')
-    filter_horizontal = ('tags',)
+    # Added property_type to the display columns
+    list_display = ('title', 'price', 'property_type', 'city', 'status', 'seller')
+    
+    # Added property_type to the right-side filter sidebar
+    list_filter = ('status', 'property_type', 'city')
+    
+    # (Removed filter_horizontal since 'tags' is gone and it's not needed for ForeignKeys)
 
 admin.site.register(Property, PropertyAdmin)
-admin.site.register(FeatureTag)
+admin.site.register(PropertyType) # Register the new model so you can add types!
 admin.site.register(UserProfile)

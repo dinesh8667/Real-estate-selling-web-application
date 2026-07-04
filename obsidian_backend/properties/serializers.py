@@ -1,39 +1,54 @@
 from rest_framework import serializers
-from .models import Property, FeatureTag, PropertyImage, UserProfile
+from .models import Property, PropertyImage, UserProfile, PropertyType, SavedProperty, Message
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 class RegisterSerializer(serializers.ModelSerializer):
+    # These fields aren't on the default User model, so we tell the serializer to expect them
     role = serializers.CharField(write_only=True, required=False)
+    user_name = serializers.CharField(write_only=True, required=False, allow_blank=True)
+    phone_number = serializers.CharField(write_only=True, required=False, allow_blank=True)
+    bio = serializers.CharField(write_only=True, required=False, allow_blank=True)
+    agency_name = serializers.CharField(write_only=True, required=False, allow_blank=True)
 
     class Meta:
         model = User
-        fields = ('email', 'password', 'role')
+        # Notice we are using 'email' as the main identifier here instead of username
+        fields = ('email', 'password', 'role', 'user_name', 'phone_number', 'bio', 'agency_name')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
-        # BULLETPROOF FIX: Grab 'role' directly from the raw incoming data
-        # so Django's validator can't accidentally strip it out.
+        # 1. Pop out the custom Profile data so it doesn't crash the base User creation
         raw_role = self.initial_data.get('role', 'buyer')
-        
-        # Clean it up just in case (removes spaces, makes lowercase)
         clean_role = str(raw_role).lower().strip()
         
-        # Create the base user
+        user_name = self.initial_data.get('user_name', '')
+        phone_number = self.initial_data.get('phone_number', '')
+        bio = self.initial_data.get('bio', '')
+        agency_name = self.initial_data.get('agency_name', '')
+
+        # 2. Create the base Django User (We use their email as their official username behind the scenes)
         user = User.objects.create_user(
-            username=validated_data['email'],
+            username=validated_data['email'], 
             email=validated_data['email'],
             password=validated_data['password']
         )
         
-        # Now create the profile with absolute certainty
-        UserProfile.objects.create(user=user, is_seller=(clean_role == 'seller'))
+        # 3. Create the awesome custom Profile with all the new data!
+        UserProfile.objects.create(
+            user=user, 
+            is_seller=(clean_role == 'seller'),
+            user_name=user_name,
+            phone_number=phone_number,
+            bio=bio,
+            agency_name=agency_name
+        )
         
         return user
 
-class FeatureTagSerializer(serializers.ModelSerializer):
+class PropertyTypeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = FeatureTag
+        model = PropertyType
         fields = ['id', 'name']
 
 class PropertyImageSerializer(serializers.ModelSerializer):
@@ -41,27 +56,20 @@ class PropertyImageSerializer(serializers.ModelSerializer):
         model = PropertyImage
         fields = ['id', 'image', 'is_main']
 
-# class PropertySerializer(serializers.ModelSerializer):
-#     # This nests the tags and images directly inside the property JSON
-#     # so React gets all the data in one single API call!
-#     tags = FeatureTagSerializer(many=True, read_only=True)
-#     images = PropertyImageSerializer(many=True, read_only=True)
-#     seller_name = serializers.CharField(source='seller.get_full_name', read_only=True)
+class UserProfileDetailSerializer(serializers.ModelSerializer):
+    email = serializers.ReadOnlyField(source='user.email')
 
-#     class Meta:
-#         model = Property
-#         fields = [
-#             'id', 'title', 'description', 'price', 'bedrooms', 
-#             'bathrooms', 'area_sqft', 'address', 'city', 
-#             'status', 'views', 'created_at', 'seller_name', 
-#             'tags', 'images'
-#         ]
+    class Meta:
+        model = UserProfile
+        # fields = ['email', 'is_seller', 'user_name', 'phone_number', 'bio', 'agency_name']
+        fields = '__all__'
 
 class PropertySerializer(serializers.ModelSerializer):
     main_image = serializers.SerializerMethodField()
-
-    # NEW: Tell Django not to look for this in the React request
+    gallery_images = serializers.SerializerMethodField()
+    property_type_name = serializers.ReadOnlyField(source='property_type.name')
     seller = serializers.ReadOnlyField(source='seller.username')
+    seller_details = UserProfileDetailSerializer(source='seller.profile', read_only=True)
 
     class Meta:
         model = Property
@@ -69,44 +77,84 @@ class PropertySerializer(serializers.ModelSerializer):
 
     def get_main_image(self, obj):
         request = self.context.get('request')
+        first_image = obj.images.filter(is_main=True).first() 
         
-        # FIX: Use the custom related_name 'images' instead of 'propertyimage_set'
-        first_image = obj.images.first() 
-        
+        if not first_image:
+            first_image = obj.images.first()
+            
         if first_image and first_image.image:
             return request.build_absolute_uri(first_image.image.url)
         return None
 
-    # NEW: Override the creation process to handle physical files
-    def create(self, validated_data):
-        # 1. Grab the request object so we can access the hidden files
+    def get_gallery_images(self, obj):
         request = self.context.get('request')
+        other_images = obj.images.filter(is_main=False)
         
-        # 2. Extract the array of files named 'images' (we will set this name in React)
-        images_data = request.FILES.getlist('images')
+        image_urls = []
+        for img in other_images:
+            if img.image:
+                image_urls.append(request.build_absolute_uri(img.image.url))
+                
+        return image_urls
 
-        # 3. Create the actual property first using the standard text data
+    def create(self, validated_data):
+        request = self.context.get('request')
+        images_data = request.FILES.getlist('images')
+        main_image_index = int(request.data.get('main_image_index', 0))
+
         property_instance = super().create(validated_data)
 
-        # 4. Loop through the uploaded files and link them to the new property
         for index, image_data in enumerate(images_data):
             PropertyImage.objects.create(
                 property=property_instance,
                 image=image_data,
-                is_main=(index == 0) # Automatically makes the first photo the cover!
+                is_main=(index == main_image_index) 
             )
 
         return property_instance
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
-        # Run the standard login check
         data = super().validate(attrs)
-        
-        # NEW: Inject our custom profile data into the JSON response!
         try:
             data['is_seller'] = self.user.profile.is_seller
+            data['user_name'] = self.user.profile.user_name
+            data['user_id'] = self.user.id # Optional: Send name back on login!
         except UserProfile.DoesNotExist:
             data['is_seller'] = False
-            
         return data
+    
+class UserProfileDetailSerializer(serializers.ModelSerializer):
+    # Reach into the linked User table to grab the email!
+    email = serializers.ReadOnlyField(source='user.email')
+
+    class Meta:
+        model = UserProfile
+        fields = ['email', 'is_seller', 'user_name', 'phone_number', 'bio', 'agency_name']
+
+class SavedPropertySerializer(serializers.ModelSerializer):
+    # This nests the entire property payload inside the saved property record!
+    property_details = PropertySerializer(source='property', read_only=True)
+
+    class Meta:
+        model = SavedProperty
+        fields = ['id', 'buyer', 'property', 'saved_at', 'property_details']
+        read_only_fields = ['buyer']
+
+class MessageSerializer(serializers.ModelSerializer):
+    # Send back the actual names/emails so the frontend UI looks good
+    sender_name = serializers.ReadOnlyField(source='sender.profile.user_name')
+    sender_email = serializers.ReadOnlyField(source='sender.email')
+    
+    receiver_name = serializers.ReadOnlyField(source='receiver.profile.user_name')
+    property_title = serializers.ReadOnlyField(source='property.title')
+
+    class Meta:
+        model = Message
+        fields = [
+            'id', 'sender', 'receiver', 'property', 'content', 
+            'timestamp', 'is_read', 'sender_name', 'sender_email', 
+            'receiver_name', 'property_title'
+        ]
+        # React shouldn't send the 'sender' ID, Django will grab it securely from the token
+        read_only_fields = ['sender', 'is_read', 'timestamp']

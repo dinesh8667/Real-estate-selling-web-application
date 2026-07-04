@@ -1,0 +1,302 @@
+// Color Variables mapped to your UI reference
+$bg-main: #121212;
+$bg-header-footer: #1a1a1a;
+$bg-card: #222222;
+$border-color: #2a2a2a;
+$accent-purple: #892cdc;
+$text-light: #ffffff;
+$text-muted: #a0a0a0;
+
+.communication-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: $bg-main;
+  color: $text-light;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  overflow: hidden;
+
+  /* =========================================
+     HEADER SECTION
+     ========================================= */
+  .chat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: clamp(12px, 2vw, 20px) clamp(16px, 4vw, 40px);
+    background-color: $bg-header-footer;
+    border-bottom: 1px solid $border-color;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: clamp(12px, 2vw, 16px);
+
+      .back-btn {
+        background: transparent;
+        border: none;
+        color: $text-muted;
+        font-size: clamp(1.1rem, 1.5vw, 1.2rem);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px;
+        border-radius: 50%;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.05);
+          color: $text-light;
+        }
+      }
+
+      .user-avatar {
+        width: clamp(40px, 5vw, 48px);
+        height: clamp(40px, 5vw, 48px);
+        border-radius: 50%;
+        background-color: #333;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: clamp(1.2rem, 1.5vw, 1.5rem);
+        color: $text-muted;
+      }
+
+      .user-details {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        h2 {
+          font-size: clamp(1rem, 1.5vw, 1.2rem);
+          margin: 0 0 2px 0;
+          font-weight: 600;
+        }
+
+        span {
+          font-size: clamp(0.75rem, 1vw, 0.85rem);
+          color: $text-muted;
+        }
+      }
+    }
+  }
+
+  /* =========================================
+     MESSAGES CONTAINER
+     ========================================= */
+  .messages-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 clamp(16px, 4vw, 40px) clamp(20px, 4vw, 40px);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(12px, 2vw, 16px);
+
+    // Custom scrollbar
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: #333;
+      border-radius: 4px;
+    }
+
+    .message {
+    //   max-width: clamp(260px, 75vw, 600px) !important;
+      padding: clamp(12px, 2vw, 16px) clamp(16px, 3vw, 20px);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+      p {
+        margin: 0;
+        font-size: clamp(0.9rem, 1.2vw, 1rem);
+        line-height: 1.5;
+        white-space: pre-wrap; // Respects line breaks in messages
+      }
+
+      span {
+        font-size: clamp(0.7rem, 1vw, 0.75rem);
+        align-self: flex-end;
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      &.received {
+        align-self: flex-start;
+        background-color: $bg-card;
+        color: $text-light;
+        border-bottom-left-radius: 4px;
+      }
+
+      &.sent {
+        align-self: flex-end;
+        background-color: $accent-purple;
+        color: $text-light;
+        border-bottom-right-radius: 4px;
+      }
+    }
+  }
+
+  
+  /* =========================================
+     PROPERTY PREVIEW LINK
+     ========================================= */
+  a {
+    position: sticky;
+    top: 5px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    justify-content: center;
+    // margin: clamp(16px, 3vw, 24px) 0;
+    margin-top: 5px;
+    z-index: 5;
+
+    .property-preview {
+      display: flex;
+      align-items: center;
+      background-color: $bg-card;
+      padding: clamp(8px, 1vw, 5px) clamp(12px, 0vw, 0px);
+      border-radius: 12px;
+      gap: clamp(12px, 2vw, 16px);
+      width: 90%;
+      max-width: 600px;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+      &:hover {
+        border-color: $border-color;
+        background-color: lighten($bg-card, 3%);
+      }
+
+      img {
+        width: clamp(40px, 6vw, 70px);
+        height: clamp(40px, 6vw, 70px);
+        border-radius: 8px;
+        object-fit: cover;
+      }
+
+      .property-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        margin: 0;
+
+        h3 {
+          font-size: clamp(0.9rem, 1.2vw, 1rem);
+          margin: 0;
+          font-weight: 600;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        p {
+          font-size: clamp(0.85rem, 1vw, 0.9rem);
+          color: lighten($accent-purple, 15%);
+          margin: 0;
+        }
+      }
+
+      .property-arrow {
+        color: $text-muted;
+        font-size: 0.9rem;
+      }
+    }
+  }
+
+
+  /* =========================================
+     INPUT AREA (Footer)
+     ========================================= */
+  .chat-input-area {
+    display: flex;
+    align-items: center;
+    gap: clamp(10px, 2vw, 16px);
+    padding: clamp(16px, 2vw, 24px) clamp(16px, 4vw, 40px);
+    background-color: $bg-header-footer;
+    border-top: 1px solid $border-color;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+
+    input {
+      flex: 1;
+      background-color: $bg-card;
+      border: 1px solid $border-color;
+      color: $text-light;
+      padding: clamp(12px, 2vw, 16px) clamp(16px, 3vw, 24px);
+      border-radius: 30px;
+      font-size: clamp(0.9rem, 1.2vw, 1rem);
+      outline: none;
+      transition: border-color 0.2s ease;
+
+      &::placeholder {
+        color: $text-muted;
+      }
+
+      &:focus {
+        border-color: $accent-purple;
+      }
+    }
+
+    .send-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background-color: $accent-purple;
+      color: $text-light;
+      border: none;
+      padding: clamp(12px, 2vw, 16px) clamp(20px, 3vw, 32px);
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: clamp(0.9rem, 1.2vw, 1rem);
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      white-space: nowrap;
+
+      &:hover:not(:disabled) {
+        background-color: darken($accent-purple, 10%);
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      svg {
+        font-size: 1.1em;
+      }
+    }
+  }
+}
+
+/* =========================================
+   MOBILE ADJUSTMENTS
+   ========================================= */
+@media screen and (max-width: 600px) {
+  .communication-page {
+    .chat-input-area {
+      .send-btn {
+        // On very small screens, hide the "Send Reply" text and just show the icon
+        padding: 14px;
+        border-radius: 25px;
+        
+        // Hide the text node inside the button while keeping the SVG visible
+        font-size: 0;
+        
+        svg {
+          font-size: 1.2rem;
+          margin: 0;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,120 @@
+// ==========================================
+// Variables
+// ==========================================
+$footer-bg: #6f2da8;
+$text-light: white;
+$text-muted: rgba(255, 255, 255, 0.85);
+$text-link: rgba(255, 255, 255, 0.9);
+
+// ==========================================
+// Footer Layout
+// ==========================================
+.footer {
+    width: 100%;
+    background: $footer-bg;
+    color: $text-light;
+    padding: 50px 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 40px;
+
+    @media (max-width: 768px) {
+        padding: 50px 30px;
+        flex-direction: column;
+        gap: 50px;
+    }
+
+    @media (max-width: 480px) {
+        padding: 40px 20px;
+        text-align: center;
+        align-items: center;
+    }
+}
+
+// ==========================================
+// Left Section (Branding & Copy)
+// ==========================================
+.footer-left {
+    max-width: 450px;
+
+    @media (max-width: 480px) {
+        max-width: 100%;
+    }
+
+    h2 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+        font-weight: 700;
+
+        @media (max-width: 768px) {
+            font-size: 1.8rem;
+        }
+
+        @media (max-width: 480px) {
+            font-size: 1.6rem;
+        }
+    }
+
+    p {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: $text-muted;
+        margin-bottom: 40px;
+
+        @media (max-width: 768px) {
+            font-size: 1rem;
+        }
+
+        @media (max-width: 480px) {
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+        }
+    }
+
+    span {
+        font-size: 0.75rem;
+        color: $text-muted;
+    }
+}
+
+// ==========================================
+// Right Section (Navigation Links)
+// ==========================================
+.footer-links {
+    display: flex;
+    gap: 120px;
+
+    @media (max-width: 768px) {
+        gap: 80px;
+    }
+
+    @media (max-width: 480px) {
+        width: 100%;
+        justify-content: center;
+        gap: 50px;
+    }
+}
+
+.footer-column {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+
+    @media (max-width: 480px) {
+        align-items: center;
+    }
+
+    a {
+        color: $text-link;
+        text-decoration: none;
+        font-size: 1rem;
+        transition: 0.3s;
+
+        &:hover {
+            color: $text-light;
+            transform: translateX(3px);
+        }
+    }
+}

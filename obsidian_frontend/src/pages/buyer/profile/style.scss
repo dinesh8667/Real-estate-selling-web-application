@@ -1,0 +1,228 @@
+// ==========================================
+// Variables
+// ==========================================
+$bg-main: #000;
+$bg-card: #080808;
+$bg-input: #0f172a;
+$text-light: white;
+$text-muted: #9ca3af;
+$text-label: #d1d5db;
+$border-color: rgba(255, 255, 255, 0.08);
+
+$primary-color: #a855f7;
+$primary-gradient: linear-gradient(135deg, #9333ea, #c084fc);
+$danger-color: crimson;
+
+// ==========================================
+// Layout & Container
+// ==========================================
+.profile-page {
+    min-height: 100vh;
+    background: $bg-main;
+    padding: 40px 20px;
+
+    @media (max-width: 480px) {
+        padding: 20px 15px;
+    }
+}
+
+.profile-container {
+    max-width: 900px;
+    margin: auto;
+}
+
+.page-heading {
+    margin-bottom: 30px;
+
+    h1 {
+        font-size: 3rem;
+        margin-bottom: 10px;
+
+        @media (max-width: 768px) {
+            font-size: 2.3rem;
+        }
+
+        @media (max-width: 480px) {
+            font-size: 1.9rem;
+        }
+    }
+
+    p {
+        color: $text-muted;
+    }
+}
+
+// ==========================================
+// Profile Card
+// ==========================================
+.profile-card {
+    background: $bg-card;
+    border: 1px solid rgba($primary-color, 0.25);
+    border-radius: 20px;
+    padding: 40px;
+
+    @media (max-width: 768px) {
+        padding: 25px;
+    }
+
+    @media (max-width: 480px) {
+        padding: 20px;
+    }
+}
+
+// ==========================================
+// Avatar Section
+// ==========================================
+.avatar-section {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+}
+
+.avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid rgba($primary-color, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @media (max-width: 480px) {
+        width: 90px;
+        height: 90px;
+    }
+
+    i {
+        font-size: 75px;
+    }
+}
+
+.avatar-content {
+    h2 {
+        margin-bottom: 8px;
+    }
+
+    p {
+        color: $text-muted;
+        margin-bottom: 15px;
+    }
+}
+
+.divider {
+    border-top: 1px solid $border-color;
+    margin: 30px 0;
+}
+
+// ==========================================
+// Form Grid
+// ==========================================
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+
+    @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.full-width {
+    grid-column: span 2;
+
+    @media (max-width: 768px) {
+        grid-column: span 1;
+    }
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+
+    label {
+        margin-bottom: 10px;
+        color: $text-label;
+    }
+
+    input {
+        height: 55px;
+        padding: 0 15px;
+        border-radius: 12px;
+        border: 1px solid $border-color;
+        background: $bg-input;
+        color: $text-light;
+        outline: none;
+
+        @media (max-width: 480px) {
+            height: 50px;
+        }
+
+        &:focus {
+            border-color: $primary-color;
+        }
+    }
+}
+
+// ==========================================
+// Buttons
+// ==========================================
+.btn-section {
+    display: flex;
+    justify-content: space-between;
+
+    @media (max-width: 768px) {
+        flex-direction: column-reverse;
+        justify-content: center;
+        flex-wrap: wrap; // Added so the buttons don't clip if they stack
+        gap: 15px;
+    }
+}
+
+.logout-btn {
+    border: 2px solid $danger-color;
+    padding: 5px 10px;
+    border-radius: 40px;
+    background: transparent;
+    color: $danger-color;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 40px;
+    transition: 0.3s;
+
+    @media (max-width: 768px) {
+        margin-top: 0;
+    }
+
+    &:hover {
+        background-color: $danger-color;
+        color: rgba(20, 0, 35, 0.95);
+    }
+}
+
+.save-btn {
+    border: none;
+    padding: 14px 35px;
+    border-radius: 40px;
+    background: $primary-gradient;
+    color: $text-light;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: 0.3s;
+
+    @media (max-width: 768px) {
+        width: 100%;
+    }
+
+    &:hover {
+        box-shadow: 0 0 20px rgba($primary-color, 0.4);
+    }
+}

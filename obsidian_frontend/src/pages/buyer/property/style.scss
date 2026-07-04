@@ -1,0 +1,570 @@
+// ==========================================
+// Variables
+// ==========================================
+$bg-main: #050505;
+$bg-overlay: #0505059c;
+$primary-color: #8b3dff;
+$text-light: white;
+$border-radius-lg: 25px;
+$border-radius-md: 18px;
+
+// ==========================================
+// Base Layout & Shared
+// ==========================================
+.property-details-page {
+    background: $bg-main;
+    color: $text-light;
+    min-height: 100vh;
+    padding: clamp(16px, 4vw, 40px);
+
+    @media (max-width: 600px) {
+        padding: 16px;
+    }
+}
+
+.property-container {
+    max-width: 1400px;
+    margin: auto;
+}
+
+hr {
+    border: none;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 30px 0;
+}
+
+.saved {
+    color: $primary-color;
+}
+
+// ==========================================
+// Image Viewer Modal
+// ==========================================
+// ==========================================
+// Image Viewer Modal (Responsive)
+// ==========================================
+.image-viwer-container {
+    position: fixed;
+    top: 0px;
+    left: 0px; // Added for stability
+    z-index: 100; // Bumped up slightly to ensure it sits over everything
+    width: 100%;
+    height: 100vh;
+    background-color: $bg-overlay;
+    padding-top: 75px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+
+    @media (max-width: 900px) {
+        gap: 15px;
+        padding-top: 50px;
+    }
+
+    @media (max-width: 600px) {
+        gap: 10px;
+        padding-top: 0px; // Centers vertically on mobile
+    }
+
+    button {
+        cursor: pointer;
+        background: transparent;
+        border: none;
+        color: $text-light;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    }
+
+    i {
+        font-size: 40px;
+
+        @media (max-width: 600px) {
+            font-size: 30px;
+        }
+    }
+
+    .close-icon {
+        position: absolute;
+        top: 70px;
+        left: 90%;
+
+        @media (max-width: 1200px) {
+            left: 85%;
+        }
+
+        @media (max-width: 900px) {
+            top: 40px;
+            left: auto;
+            right: 40px; // Switching to 'right' prevents overflow on smaller screens
+        }
+
+        @media (max-width: 600px) {
+            top: 20px;
+            right: 20px;
+            font-size: 35px;
+        }
+    }
+
+    div {
+        width: 60%;
+        height: 550px;
+        border-radius: $border-radius-lg;
+        overflow: hidden;
+
+        @media (max-width: 1200px) {
+            width: 75%;
+            height: 450px;
+        }
+
+        @media (max-width: 900px) {
+            width: 85%;
+            height: 380px;
+        }
+
+        @media (max-width: 600px) {
+            width: 90%;
+            height: 280px;
+            border-radius: 14px;
+        }
+        
+        @media (max-width: 380px) {
+            width: 95%;
+            height: 220px;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+    }
+}
+
+// ==========================================
+// Gallery Section
+// ==========================================
+.gallery {
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+
+    @media (max-width: 900px) {
+        flex-direction: column;
+        height: auto;
+    }
+
+    @media (max-width: 600px) {
+        gap: 10px;
+    }
+}
+
+.main-image {
+    position: relative;
+    width: 63.5%;
+    height: clamp(260px, 45vw, 600px);
+    overflow: hidden;
+    border-radius: $border-radius-md;
+
+    @media (max-width: 900px) {
+        width: 100%;
+        height: clamp(220px, 60vw, 400px);
+    }
+
+    @media (max-width: 600px) {
+        height: 220px;
+        border-radius: 14px;
+    }
+
+    @media (max-width: 380px) {
+        height: 180px;
+    }
+
+    i {
+        position: absolute;
+        z-index: 1;
+        font-size: 25px;
+        left: 25px;
+        top: 15px;
+        padding: 0 7.5px;
+        background-color: rgba(255, 255, 255, 0.255);
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transform: scale(1.4);
+        cursor: pointer;
+        transition: transform 0.5s ease;
+
+        &:hover {
+            transform: scale(1.42);
+        }
+    }
+}
+
+.side-images {
+    width: 35%;
+    height: clamp(260px, 45vw, 600px);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    @media (max-width: 900px) {
+        width: 100%;
+        flex-direction: row;
+        height: clamp(120px, 30vw, 200px);
+    }
+
+    @media (max-width: 600px) {
+        height: 120px;
+        gap: 10px;
+    }
+
+    @media (max-width: 380px) {
+        height: 100px;
+    }
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: $border-radius-md;
+        cursor: pointer;
+        transition: transform 0.5s ease;
+
+        &:hover {
+            transform: scale(1.02);
+        }
+    }
+}
+
+.side-image {
+    position: relative;
+    overflow: hidden;
+    border-radius: $border-radius-md;
+    flex: 1;
+
+    @media (max-width: 600px) {
+        border-radius: 14px;
+    }
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+.more-images-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: $text-light;
+    cursor: pointer;
+    transition: 0.3s;
+
+    &:hover {
+        background: rgba(0, 0, 0, 0.75);
+    }
+
+    svg {
+        font-size: clamp(1.4rem, 3vw, 2rem);
+        margin-bottom: 10px;
+    }
+
+    h3 {
+        font-size: clamp(1.4rem, 3vw, 2rem);
+        font-weight: 700;
+        margin: 0;
+    }
+
+    p {
+        margin-top: 5px;
+        font-size: clamp(0.8rem, 1.5vw, 0.95rem);
+        opacity: 0.9;
+    }
+}
+
+.tag {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: $primary-color;
+    color: $text-light;
+    padding: clamp(6px, 1vw, 8px) clamp(10px, 2vw, 16px);
+    border-radius: 30px;
+    font-size: clamp(11px, 1.5vw, 13px);
+    white-space: nowrap;
+
+    @media (max-width: 600px) {
+        top: 8px;
+        left: 8px;
+    }
+
+    &.secondary {
+        left: clamp(85px, 12vw, 110px);
+        background: #1f1f1f;
+
+        @media (max-width: 600px) {
+            left: 80px;
+        }
+
+        @media (max-width: 380px) {
+            left: 70px;
+        }
+    }
+}
+
+// ==========================================
+// Property Info Section
+// ==========================================
+.property-info {
+    margin-top: 40px;
+    display: flex;
+    align-items: start;
+    gap: 40px;
+
+    @media (max-width: 1200px) {
+        flex-direction: column;
+    }
+
+    @media (max-width: 600px) {
+        margin-top: 25px;
+        gap: 25px;
+    }
+
+    h1 {
+        font-size: clamp(1.6rem, 4vw, 2.5rem);
+        font-weight: 700;
+        line-height: 1.2;
+        margin-bottom: 15px;
+    }
+}
+
+.property-info-left {
+    width: 70%;
+    min-width: 0;
+
+    @media (max-width: 1200px) {
+        width: 100%;
+    }
+}
+
+.property-info-right {
+    width: 411px;
+    flex-shrink: 0;
+
+    @media (max-width: 1200px) {
+        width: 100%;
+    }
+}
+
+.location {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #c8c8c8;
+    font-size: clamp(0.85rem, 1.5vw, 1rem);
+    flex-wrap: wrap;
+}
+
+.price-tag {
+    color: #d0a4ff;
+    font-size: clamp(1.3rem, 3vw, 1.7rem);
+}
+
+.sold-tag {
+    font-size: 20px;
+    font-weight: 600;
+    padding: 4px 15px;
+    margin-left: 15px;
+    color: crimson;
+    border: 2px solid crimson;
+    border-radius: 25px;
+    background-color: rgba(220, 20, 60, 0.285);
+}
+
+.stats {
+    display: flex;
+    gap: clamp(20px, 5vw, 60px);
+    flex-wrap: wrap;
+
+    @media (max-width: 600px) {
+        gap: 20px;
+    }
+
+    @media (max-width: 380px) {
+        gap: 14px;
+    }
+
+    div {
+        display: flex;
+        flex-direction: column;
+    }
+
+    strong {
+        font-size: clamp(1.4rem, 3vw, 2rem);
+    }
+
+    span {
+        color: #c0c0c0;
+        font-size: clamp(0.8rem, 1.5vw, 1rem);
+    }
+}
+
+.about {
+    h3 {
+        font-size: clamp(1.4rem, 3vw, 2rem);
+    }
+
+    p {
+        color: #c7c7c7 !important; 
+        line-height: 1.8;
+        text-align: justify;
+        font-size: clamp(0.9rem, 1.5vw, 1rem) !important;
+    }
+}
+
+.amenities {
+    margin-top: 50px;
+
+    @media (max-width: 600px) {
+        margin-top: 30px;
+    }
+
+    h3 {
+        font-size: clamp(1.4rem, 3vw, 2rem);
+    }
+}
+
+.amenity-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+
+    @media (max-width: 600px) {
+        grid-template-columns: 1fr;
+    }
+
+    div {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: clamp(0.85rem, 1.5vw, 1rem);
+    }
+
+    svg {
+        color: #c792ff;
+        flex-shrink: 0;
+    }
+}
+
+// ==========================================
+// Contact Card
+// ==========================================
+.contact-card {
+    position: sticky;
+    top: 100px;
+    height: fit-content;
+    background: linear-gradient(180deg, rgba(25, 0, 45, 0.95), rgba(12, 12, 18, 0.95));
+    border: 1px solid rgba(171, 95, 255, 0.2);
+    border-radius: 20px;
+    padding: 25px;
+
+    @media (max-width: 1200px) {
+        position: static;
+    }
+
+    @media (max-width: 600px) {
+        padding: 18px;
+        border-radius: 16px;
+    }
+
+    h3 {
+        font-size: clamp(1.4rem, 3vw, 1.8rem);
+        margin-bottom: 25px;
+    }
+
+    .agent {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        margin-bottom: 25px;
+
+        i {
+            font-size: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            padding: 0 14px;
+            border: 2px solid #9e4eff;
+            flex-shrink: 0;
+        }
+
+        img {
+            @media (max-width: 600px) {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        h4 {
+            font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+        }
+
+        p {
+            color: #b7b7b7;
+            font-size: clamp(0.8rem, 1.5vw, 14px);
+        }
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    input,
+    textarea {
+        background: #0f0f14;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        color: $text-light;
+        font-size: clamp(0.85rem, 1.5vw, 1rem);
+        padding: 14px;
+        border-radius: 12px;
+        outline: none;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .request-btn {
+        border: none;
+        padding: 15px;
+        width: 100%;
+        background: linear-gradient(90deg, $primary-color, #bb75ff);
+        color: $text-light;
+        font-weight: 600;
+        font-size: clamp(0.9rem, 1.5vw, 1rem);
+        border-radius: 50px;
+        cursor: pointer;
+    }
+}

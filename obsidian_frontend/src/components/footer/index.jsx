@@ -1,11 +1,11 @@
 import React from "react";
-import "./style.css";
+import "./style.scss";
 
 function index() {
   return (
     <footer className="footer">
       <div className="footer-left">
-        <h2>Obsidian Estate</h2>
+        <h2>MintFizo Estate</h2>
 
         <p>
           Premium real estate portal for modern investors
@@ -14,7 +14,7 @@ function index() {
         </p>
 
         <span>
-          © 2024 Obsidian Estate. All rights reserved.
+          © 2024 MintFizo Estate. All rights reserved.
         </span>
       </div>
 

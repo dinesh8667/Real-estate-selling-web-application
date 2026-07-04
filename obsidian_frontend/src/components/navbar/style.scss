@@ -1,0 +1,177 @@
+// Color Variables mapped to the Obsidian Estate theme
+$bg-navbar: rgba(10, 10, 10, 0.85); // Slightly transparent for a glass effect
+$bg-menu-mobile: #0a0a0a;
+$border-color: #222222;
+$accent-purple: #892cdc;
+$accent-purple-hover: #a855f7;
+$text-light: #ffffff;
+$text-muted: #a0a0a0;
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: clamp(10px, 2vw, 0px) clamp(20px, 4vw, 40px);
+  background-color: $bg-navbar;
+  border-bottom: 1px solid $border-color;
+  
+  // Keeps the navbar fixed at the top while scrolling
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(12px); // Glassmorphism effect
+  -webkit-backdrop-filter: blur(12px);
+  
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  box-sizing: border-box;
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  /* =========================================
+     LOGO
+     ========================================= */
+  .logo {
+    display: flex;
+    align-items: center;
+    // Pushes logo to the left, acting as a flex column balancer
+    flex: 1; 
+
+    h2 {
+      margin: 0;
+      color: $text-light;
+      font-size: clamp(1.2rem, 2vw, 1.5rem);
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+  }
+
+  /* =========================================
+     NAVIGATION LINKS (DESKTOP)
+     ========================================= */
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: clamp(20px, 3vw, 40px);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    
+    // Centers the links in the middle of the navbar
+    flex: 2; 
+    justify-content: center;
+
+    li a {
+      color: $text-muted;
+      font-size: clamp(0.9rem, 1vw, 1rem);
+      font-weight: 500;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: $text-light;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+      }
+    }
+  }
+
+  /* =========================================
+     RIGHT SIDE ICONS / ACTIONS
+     ========================================= */
+  .left-side {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: clamp(16px, 2vw, 24px);
+    flex: 1; // Balances the logo's flex space
+
+    a {
+      color: $text-muted;
+      font-size: clamp(1.1rem, 1.5vw, 1.3rem);
+      display: flex;
+      align-items: center;
+      transition: all 0.3s ease;
+
+      &:hover {
+        color: $accent-purple-hover;
+        transform: translateY(-2px);
+      }
+    }
+
+    .profile-icon{
+        font-size: 40px;
+    }
+
+    .nav-actions {
+      .login-btn {
+        background-color: $accent-purple;
+        color: $text-light;
+        border: none;
+        padding: 8px 24px;
+        border-radius: 30px;
+        font-weight: 600;
+        font-size: clamp(0.85rem, 1vw, 0.95rem);
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: darken($accent-purple, 10%);
+        }
+      }
+    }
+  }
+
+  /* =========================================
+     MOBILE MENU TOGGLE (HAMBURGER)
+     ========================================= */
+  .menu-toggle {
+    display: none; // Hidden on desktop
+    background: transparent;
+    border: none;
+    color: $text-light;
+    font-size: 1.8rem;
+    cursor: pointer;
+    margin-left: 16px;
+  }
+}
+
+/* =========================================
+   MOBILE LAYOUT (SLIDE-IN MENU)
+   ========================================= */
+@media screen and (max-width: 768px) {
+  .navbar {
+    .menu-toggle {
+      display: block; // Show hamburger icon
+    }
+
+    // Adjust left-side to not take up flex space and sit next to the hamburger
+    .left-side {
+      flex: none;
+    }
+
+    .nav-links {
+      position: absolute;
+      top: 100%;
+      left: -100%; // Hidden off-screen by default
+      width: 100%;
+      height: 100vh;
+      background-color: $bg-menu-mobile;
+      flex-direction: column;
+      justify-content: flex-start;
+      padding-top: 40px;
+      gap: 30px;
+      transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1); // Smooth slide
+      border-top: 1px solid $border-color;
+
+      // When the state sets menuOpen to true, this class is applied
+      &.active {
+        left: 0;
+      }
+
+      li a {
+        font-size: 1.2rem; // Larger tap targets for mobile
+      }
+    }
+  }
+}
