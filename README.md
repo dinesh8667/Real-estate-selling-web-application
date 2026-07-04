@@ -36,35 +36,35 @@ MintFizo Estate is a full-stack SaaS property management platform designed for u
 Here is a look at the MintFizo Estate platform in action:
 
 ### 1. Public Storefront (Home)
-![Home Page UI](home-page.png)
+![Home Page UI](.assets/home-page.png)
 *The unauthenticated public landing page featuring an interactive search engine and dynamic luxury real estate grid.*
 
 ### 2. Account Registration (Signup)
-![Signup UI](signup-page.png)
+![Signup UI](.assets/signup-page.png)
 *Secure role-based onboarding where users choose to join the platform as a prospective buyer or an exclusive seller.*
 
 ### 3. Seller Dashboard
-![Dashboard UI](dashboard-page.png)
+![Dashboard UI](.assets/dashboard-page.png)
 *The centralized, role-protected management hub where verified sellers track, edit, and oversee their entire property portfolio.*
 
 ### 4. Property Creation (New Listing)
-![New Listing UI](new-listing-page.png)
+![New Listing UI](.assets/new-listing-page.png)
 *A comprehensive multipart form allowing sellers to upload rich property details, set pricing, and manage high-resolution image galleries.*
 
 ### 5. Immersive Property Showcase (The "Zillow" View)
-![Property Detail UI](property-page.png)
+![Property Detail UI](.assets/property-page.png)
 *The high-converting buyer deep-dive page, featuring an expanded image gallery, full estate specifications, and a direct negotiation trigger.*
 
 ### 6. Seller Profile Management
-![Profile Settings UI](profile-page.png)
+![Profile Settings UI](.assets/profile-page.png)
 *A dedicated settings page where agents can update their professional identity, contact details, and agency bio.*
 
 ### 7. Inquiries Inbox
-![Inquiries UI](notification-page.png)
+![Inquiries UI](.assets/notification-page.png)
 *A centralized inbox for sellers to track and manage incoming buyer interests and viewing requests across all their active listings.*
 
 ### 8. Direct Communication Hub
-![Communication UI](chat-page.png)
+![Communication UI](.assets/chat-page.png)
 *A seamless messaging interface connecting buyers and sellers directly, featuring contextual property details and threaded chat history.*
 
 ---
